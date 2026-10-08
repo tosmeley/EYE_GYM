@@ -5,7 +5,7 @@ A free, browser-based eye exercise game. Five short exercises take about two min
 **Play it:** [tosmeley.github.io/EYE_GYM](https://tosmeley.github.io/EYE_GYM/)
 
 <p align="center">
-  <img src="demo.gif" alt="Eye Gym demo" width="320">
+  <img src="demo.gif" alt="Eye Gym demo" width="280">
 </p>
 
 
