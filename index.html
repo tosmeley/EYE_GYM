@@ -818,7 +818,7 @@ tr:{
       update(dt){
         t0 += dt; const k = t0/dur;
         const m = Math.max(40, Math.min(W,H)*0.12), A = Math.max(3*(W/2-m), 2*(H/2-m), 1);
-        p += dt*Math.min(0.45 + 0.45*k, (220 + 280*k)/A);   // max about 220 to 500 px/s
+        p += dt*Math.min(0.45 + 0.45*k, (400 + 500*k)/A);   // max about 220 to 500 px/s
         const d = at(); trail.push(d); if (trail.length > 36) trail.shift();
         if (pointer.active && dist(pointer.x,pointer.y,d.x,d.y) < R()*ZONE()) on += dt;
         if (t0 >= dur) this.done = true;
