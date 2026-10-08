@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eye Gym: free eye exercises online</title>
+<meta name="description" content="Free 2-minute eye exercises in your browser: follow, jump, side vision, near-far focus and rest. In English, Azerbaijani, Russian and Turkish.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2E7C76">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Eye Gym">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9EFEA; --surface:#F5F8F5; --ink:#1D2B2A; --muted:#5B6C69;
+  --accent:#2E7C76; --on-accent:#FFFFFF; --target:#D48A1F; --line:#C6D3CD; --good:#2E7C76; --bad:#B8503A;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#142120; --surface:#1A2B29; --ink:#DCE7E3; --muted:#91A5A0;
+    --accent:#62B8AF; --on-accent:#0F1A19; --target:#F0B24A; --line:#2D423F; --good:#62B8AF; --bad:#E0826C;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#142120; --surface:#1A2B29; --ink:#DCE7E3; --muted:#91A5A0;
+  --accent:#62B8AF; --on-accent:#0F1A19; --target:#F0B24A; --line:#2D423F; --good:#62B8AF; --bad:#E0826C;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;background:var(--bg);color:var(--ink);
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:6px}
+[hidden]{display:none !important}
+
+.screen{display:none;height:100%;width:100%}
+.screen.on{display:flex}
+
+/* Home */
+#home{flex-direction:column;align-items:center;overflow-y:auto;padding:1.25rem 1.25rem 3rem}
+.wrap{width:100%;max-width:34rem}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:.75rem}
+.lang{display:flex;gap:.25rem}
+.sound{background:none;border:1.5px solid var(--line);border-radius:8px;padding:.2rem .6rem;font-weight:700;font-size:.85rem;color:var(--muted);display:flex;align-items:center;gap:.35rem}
+.sound svg,.hud-sound svg{width:1.05rem;height:1.05rem;flex:none}
+.hud .hud-sound{display:grid;place-items:center;padding:.35rem .5rem}
+.lang button{background:none;border:1.5px solid transparent;border-radius:8px;padding:.2rem .55rem;font-weight:700;font-size:.85rem;color:var(--muted)}
+.lang button[aria-pressed="true"]{border-color:var(--accent);color:var(--ink)}
+.chart{display:flex;flex-direction:column;align-items:center;font-weight:700;line-height:1;margin-bottom:1.75rem}
+.chart span{letter-spacing:.3em;padding-left:.3em}
+.bigE{background:none;border:0;padding:0 .1em;font-size:clamp(5rem,24vw,8.5rem);font-weight:700;line-height:1;
+  transition:transform .35s cubic-bezier(.3,1.4,.5,1)}
+.chart .r2{font-size:clamp(2.2rem,10vw,3.4rem);margin-top:.9rem}
+.chart .r3{font-size:clamp(1.4rem,6vw,2rem);margin-top:.7rem;color:var(--muted)}
+.lede{text-align:center;color:var(--muted);max-width:28rem;margin:0 auto 1.5rem}
+.primary{display:block;width:100%;background:var(--accent);color:var(--on-accent);border:0;border-radius:12px;
+  padding:1rem 1.25rem;font-weight:700;font-size:1.1rem}
+.primary:hover{filter:brightness(1.07)}
+.ghost{background:none;border:1.5px solid var(--line);border-radius:12px;padding:.85rem 1.25rem;font-weight:700}
+.ghost:hover{border-color:var(--accent)}
+.install{display:block;width:100%;margin-top:.5rem}
+.best{text-align:center;color:var(--muted);font-size:.95rem;margin-top:.75rem;min-height:1.5em}
+.list{list-style:none;padding:0;margin:0;border-top:1.5px solid var(--line)}
+.list li{display:grid;grid-template-columns:1fr auto;align-items:center;gap:.75rem;padding:.9rem 0;border-bottom:1.5px solid var(--line)}
+.list.numbered li{grid-template-columns:2rem 1fr auto}
+.list .n{color:var(--muted);font-weight:700}
+.list .t strong{display:block}
+.list .t span{color:var(--muted);font-size:.95rem}
+.list button{background:none;border:1.5px solid var(--line);border-radius:10px;padding:.4rem .9rem;font-weight:700;font-size:.95rem}
+.list button:hover{border-color:var(--accent)}
+#stepList{margin-top:2rem}
+.sec{font-size:1.15rem;margin:2.25rem 0 .75rem}
+.sec-sub{color:var(--muted);font-size:.95rem;margin:-.4rem 0 .9rem}
+.badges{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(10rem,1fr));gap:.5rem}
+.badge{border:1.5px solid var(--line);border-radius:10px;padding:.6rem .75rem;opacity:.6}
+.badge strong{display:block;font-size:.95rem}
+.badge span{color:var(--muted);font-size:.82rem;line-height:1.35;display:block}
+.badge.got{opacity:1;border-color:var(--accent);background:var(--surface)}
+.badge.got strong{color:var(--accent)}
+.note{color:var(--muted);font-size:.9rem;margin-top:1rem}
+.note strong{color:var(--ink)}
+.notes{margin-top:2.25rem}
+
+/* History */
+.history{margin-top:1.75rem;text-align:center}
+.streak{font-weight:700;margin-bottom:.75rem}
+.bars{display:flex;align-items:flex-end;justify-content:center;gap:6px;height:64px}
+.bars span{width:18px;min-height:4px;background:var(--accent);border-radius:4px 4px 2px 2px;opacity:.85}
+.bars span:last-child{opacity:1}
+.bars-cap{color:var(--muted);font-size:.85rem;margin-top:.4rem}
+
+/* Centered screens */
+.center{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1.5rem;overflow-y:auto}
+.center .wrap{max-width:30rem;margin:auto 0}
+.kicker{color:var(--muted);font-size:.95rem;margin-bottom:.4rem;min-height:1.4em}
+.center h2{font-size:clamp(2.2rem,8vw,3rem);line-height:1.1;margin-bottom:.35rem}
+.trains{color:var(--accent);font-weight:700;margin-bottom:1.25rem}
+.how{margin-bottom:2rem}
+.btnrow{display:flex;flex-direction:column;gap:.75rem}
+.score{font-size:clamp(4rem,20vw,6.5rem);font-weight:700;line-height:1;margin:.5rem 0 .75rem}
+.detail{color:var(--muted);margin-bottom:2rem}
+.progress{font-weight:700;color:var(--accent);margin:-1.25rem 0 1rem}
+.progress:empty,.benefit:empty{display:none}
+.benefit{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:.85rem 1rem;margin:0 0 1.75rem}
+.scorenote{color:var(--muted);font-size:.85rem;margin:-1rem 0 1.75rem}
+.sumlist{list-style:none;padding:0;margin:1rem 0 1.5rem;border-top:1.5px solid var(--line);text-align:left}
+.sumlist li{display:flex;justify-content:space-between;padding:.7rem 0;border-bottom:1.5px solid var(--line)}
+.sumlist li span:last-child{font-weight:700}
+
+/* Share */
+.share-status{min-height:1.4em;color:var(--muted);font-size:.9rem;margin-top:.75rem}
+.share-fallback{width:100%;margin-top:.5rem;padding:.6rem;border:1.5px solid var(--line);border-radius:10px;
+  background:var(--surface);color:var(--ink);font:inherit;font-size:.9rem;resize:none}
+
+/* Play */
+#play{flex-direction:column}
+.hud{display:flex;align-items:center;gap:1rem;padding:.75rem 1rem;border-bottom:1.5px solid var(--line)}
+.hud .name{flex:1;min-width:0}
+.hud .name strong{margin-right:.5rem}
+.hud .name span{color:var(--muted);font-size:.9rem}
+.hud .stat{color:var(--muted);font-size:.95rem;white-space:nowrap}
+.hud .time{font-weight:700;min-width:2.5ch;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hud button{background:none;border:1.5px solid var(--line);border-radius:10px;padding:.35rem .8rem;font-weight:700;font-size:.9rem}
+.stage{position:relative;flex:1;min-height:0}
+#cv{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block}
+.dpad{position:absolute;left:50%;bottom:1rem;transform:translateX(-50%);display:none;
+  grid-template-columns:repeat(3,3.25rem);grid-template-rows:repeat(3,3.25rem);gap:.25rem}
+.dpad.on{display:grid}
+.dpad button{background:var(--surface);border:1.5px solid var(--line);border-radius:10px;display:grid;place-items:center}
+.dpad button:hover{border-color:var(--accent)}
+.dpad svg{width:1.3rem;height:1.3rem}
+.dpad [data-dir="up"]{grid-area:1/2}
+.dpad [data-dir="left"]{grid-area:2/1}
+.dpad [data-dir="right"]{grid-area:2/3}
+.dpad [data-dir="down"]{grid-area:3/2}
+.dpad .hint{grid-area:2/2;display:grid;place-items:center;color:var(--muted);font-size:.72rem;text-align:center;line-height:1.1}
+
+/* Reminder dialog and toast */
+.overlay{position:fixed;inset:0;background:rgba(10,20,20,.5);display:none;align-items:center;justify-content:center;padding:1.25rem;z-index:10}
+.overlay.on{display:flex}
+.dialog{background:var(--bg);border-radius:16px;padding:1.75rem 1.5rem;max-width:22rem;width:100%;text-align:center}
+.dialog h2{font-size:1.5rem;margin-bottom:.5rem}
+.dialog p{color:var(--muted);margin-bottom:1.5rem}
+.toast{position:fixed;left:50%;bottom:calc(1.25rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+  background:var(--ink);color:var(--bg);padding:.7rem 1.1rem;border-radius:12px;font-weight:700;
+  opacity:0;pointer-events:none;transition:opacity .25s;z-index:11;max-width:calc(100% - 2rem);text-align:center}
+.toast.show{opacity:1}
+
+@media (prefers-reduced-motion: reduce){ .bigE,.toast{transition:none} }
+@media (max-width:420px){ .hud .stat{display:none} }
+</style>
+</head>
+<body>
+
+<section id="home" class="screen on">
+  <div class="wrap">
+    <div class="topbar">
+      <button class="sound" id="soundBtn"></button>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="en">EN</button><button data-lang="az">AZ</button><button data-lang="ru">RU</button><button data-lang="tr">TR</button>
+      </div>
+    </div>
+    <h1 id="title" class="chart">
+      <button class="bigE" id="bigE" aria-label="E">E</button>
+      <span class="r2" id="t1" aria-hidden="true"></span>
+      <span class="r3" id="t2" aria-hidden="true"></span>
+    </h1>
+    <p class="lede" data-i18n="lede"></p>
+    <button class="primary" id="startWorkout" data-i18n="startWorkout"></button>
+    <p class="best" id="bestLine"></p>
+    <button class="ghost install" id="installBtn" hidden></button>
+    <p class="best" id="iosHint" hidden></p>
+    <div class="history" id="history" hidden>
+      <p class="streak" id="streakLine"></p>
+      <div class="bars" id="bars" role="img"></div>
+      <p class="bars-cap" data-i18n="barsCap"></p>
+    </div>
+
+    <ol class="list numbered" id="stepList"></ol>
+
+    <h2 class="sec" data-i18n="moreTitle"></h2>
+    <ul class="list" id="modeList"></ul>
+
+
+    <h2 class="sec" data-i18n="badgesTitle"></h2>
+    <p class="sec-sub" id="badgeCount"></p>
+    <ul class="badges" id="badges"></ul>
+
+    <div class="notes">
+      <p class="note" data-i18n-html="noteBefore"></p>
+      <p class="note" data-i18n="disclaimer"></p>
+    </div>
+  </div>
+</section>
+
+<section id="intro" class="screen center" aria-live="polite">
+  <div class="wrap">
+    <p class="kicker" id="introStep"></p>
+    <h2 id="introName"></h2>
+    <p class="trains" id="introTrains"></p>
+    <p class="how" id="introHow"></p>
+    <div class="btnrow">
+      <button class="primary" id="introGo" data-i18n="start"></button>
+      <button class="ghost" id="introBack" data-i18n="backMenu"></button>
+    </div>
+  </div>
+</section>
+
+<section id="play" class="screen">
+  <header class="hud">
+    <div class="name"><strong id="hudName"></strong><span id="hudStep"></span></div>
+    <div class="stat" id="hudStat"></div>
+    <div class="time" id="hudTime"></div>
+    <button id="hudSound" class="hud-sound"></button>
+    <button id="quit" data-i18n="end"></button>
+  </header>
+  <div class="stage" id="stage">
+    <canvas id="cv"></canvas>
+    <div class="dpad" id="dpad">
+      <button data-dir="up" aria-label="↑"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+      <button data-dir="left" aria-label="←"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="hint" aria-hidden="true" data-i18n="arrowKeys"></div>
+      <button data-dir="right" aria-label="→"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <button data-dir="down" aria-label="↓"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<section id="result" class="screen center" aria-live="polite">
+  <div class="wrap">
+    <p class="kicker" id="resStep"></p>
+    <h2 id="resName"></h2>
+    <p class="score" id="resScore"></p>
+    <p class="detail" id="resDetail"></p>
+    <p class="progress" id="resProgress"></p>
+    <p class="benefit" id="resBenefit"></p>
+    <p class="scorenote" id="resNote" data-i18n="scoreNote"></p>
+    <div class="btnrow">
+      <button class="primary" id="resPrimary"></button>
+      <button class="ghost" id="resShare" data-i18n="share"></button>
+      <button class="ghost" id="resSecondary"></button>
+    </div>
+    <p class="share-status" id="resShareStatus" aria-live="polite"></p>
+  </div>
+</section>
+
+<section id="summary" class="screen center" aria-live="polite">
+  <div class="wrap">
+    <p class="kicker" data-i18n="wDone"></p>
+    <h2 data-i18n="niceWork"></h2>
+    <p class="score" id="sumTotal"></p>
+    <p class="detail" id="sumBest"></p>
+    <p class="benefit" id="sumOff"></p>
+    <p class="scorenote" data-i18n="scoreNote"></p>
+    <ul class="sumlist" id="sumList"></ul>
+    <div class="btnrow">
+      <button class="primary" id="sumShare" data-i18n="share"></button>
+      <button class="ghost" id="sumAgain" data-i18n="again"></button>
+      <button class="ghost" id="sumHome" data-i18n="backMenu"></button>
+    </div>
+    <p class="share-status" id="sumShareStatus" aria-live="polite"></p>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ================= SETTINGS: edit these before launch ================= */
+const CONFIG = {
+  name: 'Eye Gym',             // game name (share messages, page title, disclaimer)
+  titleLines: ['EYE', 'GYM'],  // the two lines under the big E on the home screen
+  gameUrl: '',                 // your site address, e.g. 'https://gozfit.com' (empty = current page)
+  goatcounter: ''              // your GoatCounter code, e.g. 'eyegym' for eyegym.goatcounter.com (empty = no stats)
+};
+/* ===================================================================== */
+
+const I18N = {
+en:{
+  quick_desc:"45 seconds of near-far focus and rest. Good between tasks.",
+  blinkNoSound:"Blink slowly every few seconds",
+  blinkTone:"Blink slowly at each soft tone",
+  soundOn:"Sound on", soundOff:"Sound off", soundOffShift:"Sound is off, so follow NEAR and FAR on the screen.", soundOffRest:"Sound is off, so glance back at the screen now and then.",
+  pageTitle:"free eye exercises online", installBtn:"Install app", iosHint:"To install: tap Share, then Add to Home Screen.",
+  lede:"A quick workout for your eyes: follow, jump, look to the side, shift your focus, then rest.",
+  startWorkout:"Start full workout", bestLine:"Your best workout score: {b}",
+  streakN:"{n}-day streak.", streakKeep:" Work out today to keep it going.",
+  streakDone:"Done for today. Come back tomorrow to start a streak.", streakStart:"Work out today to start a streak.",
+  barsCap:"Your last workouts", barsAria:"Your last workout scores: {list}",
+  moreTitle:"More ways to play", play:"Play",
+  endless_name:"Endless Jump", endless_desc:"Hit targets until you miss 3.", endlessBest:"Best: {b}.",
+  endless_how:"Targets keep coming and get faster. You have 3 lives, and each target that runs out costs one. A click that misses the target also costs a life.",
+  daily_name:"Daily challenge", daily_desc:"Same targets for everyone today.", dailyToday:"Today: {b}.", dailyNot:"Not played today.",
+  daily_how:"Today's targets appear in the same order for everyone. Play as often as you like; your best score today counts.",
+  dailyNo:"Daily challenge #{d}", dailyTodayBest:"Today's best: {b}",
+  badgesTitle:"Badges", badgesCount:"{n} of {total} earned",
+  noteBefore:"<strong>Before you start:</strong> sit about an arm's length from the screen, keep your head still, and move only your eyes.",
+  disclaimer:"{name} is for relaxation and practice. It does not treat vision problems. If you have eye pain, double vision or sudden changes in sight, see an eye doctor.",
+  secs:"{n} s", rounds:"{n} rounds",
+  follow_name:"Follow", follow_trains:"Smooth tracking",
+  follow_how:"Keep your pointer or finger on the moving dot. Let your eyes lead and keep your head still. The dot speeds up as you go.",
+  follow_benefit:"Your eyes practised following movement smoothly.",
+  jump_name:"Jump", jump_trains:"Quick eye jumps",
+  jump_how:"Targets pop up on the left and right. Click or tap each one before its ring runs out. You get one try per target, so aim first. They get faster as you hit them.",
+  jump_benefit:"You practised quick, accurate eye jumps, like when you scan a page.",
+  edge_name:"Edge", edge_trains:"Side vision",
+  edge_how:"Keep your eyes on the cross in the middle. A letter E flashes somewhere near the edge. Answer which way its open side pointed, using the arrow keys or the buttons.",
+  edge_benefit:"You practised noticing things at the edge of your view.",
+  shift_name:"Shift", shift_trains:"Near and far focus",
+  shift_how:"Hold your thumb up about 25 cm from your face. On a high tone, look at your thumb. On a low tone, look at something far away. Switch each time you hear a tone; the screen shows it too.",
+  shift_benefit:"Your eyes switched between near and far, a change from fixed screen distance.",
+  rest_name:"Rest", rest_trains:"Relaxing your focus",
+  rest_how:"Look at something about 6 metres away, like a window or the far wall, for 20 seconds. Blink slowly each time you hear a soft tone. A chime tells you when to look back.",
+  rest_benefit:"You gave your eyes a break from the screen and blinked to keep them comfortable.",
+  start:"Start", backMenu:"Back to menu", end:"End", arrowKeys:"or arrow keys", getReady:"Get ready",
+  followStat:"{n}% on the dot", jumpStat:"{h} hits, {m} misses", edgeStat:"{n} correct",
+  shiftStat:"High tone near, low tone far", restStat:"Eyes off the screen", endlessStat:"Score {n}",
+  edgeAsk:"Which way was it open?", edgeRight:"Correct", edgeWrong:"Not quite, it was {a}",
+  blink:"Blink slowly", lookFar:"Look far away", near:"NEAR", far:"FAR", lookThumb:"Look at your thumb",
+  stepOf:"Step {i} of {n}", quickBreak:"Quick break", next:"Next: {name2}", seeResults:"See your results",
+  endWorkout:"End workout", playAgain:"Play again", done:"Done", skipped:"Skipped", share:"Share your score",
+  scoreNote:"Scores show how you played, not how well you see.",
+  followDetail:"On the dot {n}% of the time.", jumpDetail:"{h} hits and {m} misses.", avgReact:" Average reaction {ms} ms.",
+  edgeDetail:"{c} of {r} right. Shortest flash {ms} ms.", offDetail:"{n} seconds off the screen.",
+  shiftDetail:"{n} focus switches completed.", endlessDetail:"You hit {n} targets before missing 3.",
+  firstSaved:"First result saved. Next time you'll see your progress.", same:"Same as your first time.",
+  followUp:"{d} points more on the dot than your first time.", followDown:"{d} points below your first time. Scores vary from day to day.",
+  jumpUp:"Your reactions are {d} ms faster than your first time.", jumpDown:"{d} ms slower than your first time. Scores vary from day to day.",
+  edgeUp:"You caught a flash {d} ms shorter than your first time.", edgeDown:"Your shortest flash was {d} ms longer than your first time. Scores vary from day to day.",
+  offToday:"Today your eyes have spent {n} seconds off the screen.",
+  newHigh:"New high score!", yourBest:"Your best is {p}.",
+  wDone:"Workout complete", niceWork:"Nice work", firstScore:"Your first workout score.",
+  newBest:"New best. Previous best was {p}.", daysRow:" {n} days in a row.", again:"Do the workout again",
+  shareWorkout:"I scored {s} on the {name} eye workout. It takes 2 minutes. Can you beat me?",
+  shareEx:"I scored {s} on {ex} in {name}, a quick eye workout game. Can you beat it?",
+  shareBreak:"I just gave my eyes a quick break with {name}. Try it:",
+  shareEndless:"I hit {n} targets in {name} Endless Jump. Can you beat it?",
+  shareDaily:"I hit {n} targets in {name} daily challenge #{d}. Can you beat it?",
+  copied:"Copied. Paste it anywhere to share.", copyThis:"Copy this message to share:",
+  newBadge:"New badge: {b}",
+  b_first:"First workout", bd_first:"Complete a full workout",
+  b_streak3:"3 days in a row", bd_streak3:"Work out 3 days in a row",
+  b_streak7:"7 days in a row", bd_streak7:"Work out 7 days in a row",
+  b_ten:"10 workouts", bd_ten:"Complete 10 full workouts",
+  b_steady:"Steady eyes", bd_steady:"Stay on the dot 90% of the time in Follow",
+  b_quick:"Quick eyes", bd_quick:"Average reaction under 400 ms in Jump",
+  b_sharp:"Sharp eyes", bd_sharp:"Get all 12 right in Edge",
+  b_breaker:"Break taker", bd_breaker:"Take 5 quick breaks",
+  b_endless25:"Endless 25", bd_endless25:"Hit 25 targets in Endless Jump",
+  b_daily:"Daily player", bd_daily:"Play a daily challenge"
+},
+az:{
+  quick_desc:"45 saniyə: yaxın-uzaq fokus və dincəlmə. İşlər arasında faydalıdır.",
+  blinkNoSound:"Bir neçə saniyədən bir yavaşca göz qırpın",
+  blinkTone:"Hər yumşaq səsdə yavaşca göz qırpın",
+  soundOn:"Səs açıq", soundOff:"Səs bağlı", soundOffShift:"Səs bağlıdır, ekrandakı YAXIN və UZAQ işarələrinə baxın.", soundOffRest:"Səs bağlıdır, arabir ekrana nəzər salın.",
+  pageTitle:"pulsuz onlayn göz məşqləri", installBtn:"Tətbiqi quraşdır", iosHint:"Quraşdırmaq üçün: Paylaş düyməsinə, sonra Əsas ekrana əlavə et seçiminə toxunun.",
+  lede:"Gözləriniz üçün qısa məşq: nöqtəni izləyin, hədəfləri vurun, kənarlara diqqət edin, fokusu dəyişin və dincəlin.",
+  startWorkout:"Tam məşqə başla", bestLine:"Ən yaxşı nəticəniz: {b}",
+  streakN:"{n} gün ardıcıl.", streakKeep:" Seriyanı qırmamaq üçün bu gün də məşq edin.",
+  streakDone:"Bu günlük hazırdır. Seriyaya başlamaq üçün sabah qayıdın.", streakStart:"Seriyaya başlamaq üçün bu gün məşq edin.",
+  barsCap:"Son məşqləriniz", barsAria:"Son məşq nəticələriniz: {list}",
+  moreTitle:"Digər oyun rejimləri", play:"Oyna",
+  endless_name:"Sonsuz hədəflər", endless_desc:"3 hədəfi buraxana qədər vurun.", endlessBest:"Rekord: {b}.",
+  endless_how:"Hədəflər dayanmadan çıxır və getdikcə sürətlənir. 3 canınız var: vaxtında vurulmayan hər hədəf bir can aparır. Hədəfə dəyməyən klik də bir can aparır.",
+  daily_name:"Günün tapşırığı", daily_desc:"Bu gün hamı üçün eyni hədəflər.", dailyToday:"Bu gün: {b}.", dailyNot:"Bu gün oynanmayıb.",
+  daily_how:"Bu günün hədəfləri hamı üçün eyni qaydada çıxır. İstədiyiniz qədər oynaya bilərsiniz, günün ən yaxşı nəticəsi sayılır.",
+  dailyNo:"Günün tapşırığı #{d}", dailyTodayBest:"Bu günün ən yaxşısı: {b}",
+  badgesTitle:"Nişanlar", badgesCount:"Qazanılıb: {n}/{total}",
+  noteBefore:"<strong>Başlamazdan əvvəl:</strong> ekrandan təxminən bir qol uzunluğunda oturun, başınızı tərpətməyin, yalnız gözlərinizi hərəkət etdirin.",
+  disclaimer:"{name} dincəlmək və məşq etmək üçündür, görmə problemlərini müalicə etmir. Gözünüz ağrıyırsa, hər şeyi ikiqat görürsünüzsə və ya görməniz birdən dəyişibsə, göz həkiminə müraciət edin.",
+  secs:"{n} san", rounds:"{n} raund",
+  follow_name:"İzlə", follow_trains:"Rəvan izləmə",
+  follow_how:"Kursoru və ya barmağınızı hərəkət edən nöqtənin üstündə saxlayın. Başınızı tərpətməyin, yalnız gözlərinizlə izləyin. Nöqtə tədricən sürətlənir.",
+  follow_benefit:"Gözləriniz hərəkət edən nöqtəni rəvan izləməyi məşq etdi.",
+  jump_name:"Sıçra", jump_trains:"Gözün cəld hərəkəti",
+  jump_how:"Hədəflər sağda və solda çıxır. Dairəsi bitməmiş hər birinin üstünə klikləyin və ya toxunun. Hər hədəf üçün bir cəhdiniz var, ona görə əvvəlcə nişan alın. Vurduqca hədəflər sürətlənir.",
+  jump_benefit:"Səhifəni gözdən keçirəndə olduğu kimi, baxışınızı bir nöqtədən digərinə tez və dəqiq keçirməyi məşq etdiniz.",
+  edge_name:"Kənar", edge_trains:"Yan görmə",
+  edge_how:"Gözünüzü ortadakı xaçdan çəkməyin. Ekranın kənarında bir anlıq E hərfi görünəcək. Onun açıq tərəfinin hara baxdığını ox düymələri ilə seçin.",
+  edge_benefit:"Baxışınızı yayındırmadan kənarda olanları görməyi məşq etdiniz.",
+  shift_name:"Yaxın-uzaq", shift_trains:"Yaxın və uzaq fokus",
+  shift_how:"Baş barmağınızı üzünüzdən 25 sm aralıda tutun. İncə səs çıxanda barmağınıza, qalın səs çıxanda uzaqdakı bir əşyaya baxın. Hər səsdə baxışınızı dəyişin.",
+  shift_benefit:"Gözləriniz ekrandan ayrılıb növbə ilə yaxına və uzağa baxdı.",
+  rest_name:"Dincəl", rest_trains:"Fokusu rahatlatmaq",
+  rest_how:"20 saniyə ərzində təxminən 6 metr uzaqdakı bir şeyə baxın, məsələn pəncərəyə və ya qarşı divara. Hər yumşaq səs eşidəndə yavaşca göz qırpın. Zəng səsi ekrana qayıtmaq vaxtını bildirəcək.",
+  rest_benefit:"Gözlərinizə ekrandan fasilə verdiniz və yavaşca göz qırpdınız.",
+  start:"Başla", backMenu:"Menyuya qayıt", end:"Bitir", arrowKeys:"və ya ox düymələri", getReady:"Hazır olun",
+  followStat:"Nöqtədə: {n}%", jumpStat:"Vurulan: {h}, buraxılan: {m}", edgeStat:"{n} düzgün",
+  shiftStat:"İncə səs yaxın, qalın səs uzaq", restStat:"Gözlər ekrandan kənarda", endlessStat:"Xal {n}",
+  edgeAsk:"E hərfi hansı tərəfə açıq idi?", edgeRight:"Düzgün", edgeWrong:"Səhv, düzgün cavab: {a}",
+  blink:"Yavaşca göz qırpın", lookFar:"Uzağa baxın", near:"YAXIN", far:"UZAQ", lookThumb:"Baş barmağınıza baxın",
+  stepOf:"Addım {i}/{n}", quickBreak:"Qısa fasilə", next:"Növbəti: {name2}", seeResults:"Nəticələrə bax",
+  endWorkout:"Məşqi bitir", playAgain:"Yenidən oyna", done:"Hazır", skipped:"Keçildi", share:"Nəticəni paylaş",
+  scoreNote:"Xallar görmə qabiliyyətinizi yox, oyundakı nəticənizi göstərir.",
+  followDetail:"Nöqtədə qalma: {n}%.", jumpDetail:"Vurulan: {h}, buraxılan: {m}.", avgReact:" Orta reaksiya {ms} ms.",
+  edgeDetail:"{r} cavabdan {c}-i düzgün. Ən qısa görüntü {ms} ms.", offDetail:"Ekrandan kənarda {n} saniyə.",
+  shiftDetail:"{n} fokus keçidi tamamlandı.", endlessDetail:"3 səhvə qədər {n} hədəf vurdunuz.",
+  firstSaved:"İlk nəticəniz yadda saxlanıldı. Növbəti dəfə irəliləyişinizi görəcəksiniz.", same:"İlk cəhdinizlə eynidir.",
+  followUp:"İlk cəhdinizdən {d} bal çox.", followDown:"İlk cəhdinizdən {d} bal az. Nəticələr gündən-günə dəyişə bilər.",
+  jumpUp:"Reaksiyanız ilk cəhdinizdən {d} ms tezdir.", jumpDown:"İlk cəhdinizdən {d} ms gec. Nəticələr gündən-günə dəyişə bilər.",
+  edgeUp:"İlk cəhdinizdən {d} ms qısa görüntünü tutdunuz.", edgeDown:"Ən qısa görüntü ilk cəhdinizdən {d} ms uzun oldu. Nəticələr gündən-günə dəyişə bilər.",
+  offToday:"Bu gün gözləriniz ekrandan kənarda {n} saniyə keçirib.",
+  newHigh:"Yeni rekord!", yourBest:"Rekordunuz: {p}.",
+  wDone:"Məşq tamamlandı", niceWork:"Əla!", firstScore:"İlk məşq nəticəniz.",
+  newBest:"Yeni rekord. Əvvəlki rekord: {p}.", daysRow:" {n} gün ardıcıl.", again:"Məşqi təkrarla",
+  shareWorkout:"{name} göz məşqində {s} xal topladım. Cəmi 2 dəqiqə çəkir. Məni keçə bilərsən?",
+  shareEx:"{name} göz məşqi oyununda {ex} bölməsində {s} xal topladım. Keçə bilərsən?",
+  shareBreak:"{name} ilə gözlərimə qısa fasilə verdim. Sən də yoxla:",
+  shareEndless:"{name} oyununun sonsuz rejimində {n} hədəf vurdum. Keçə bilərsən?",
+  shareDaily:"{name}, günün tapşırığı #{d}: {n} hədəf vurdum. Keçə bilərsən?",
+  copied:"Kopyalandı. Paylaşmaq üçün istədiyiniz yerə yapışdırın.", copyThis:"Paylaşmaq üçün bu mesajı kopyalayın:",
+  newBadge:"Yeni nişan: {b}",
+  b_first:"İlk məşq", bd_first:"Tam məşqi bitirin",
+  b_streak3:"3 gün ardıcıl", bd_streak3:"3 gün ardıcıl məşq edin",
+  b_streak7:"7 gün ardıcıl", bd_streak7:"7 gün ardıcıl məşq edin",
+  b_ten:"10 məşq", bd_ten:"10 tam məşq bitirin",
+  b_steady:"Sabit baxış", bd_steady:"İzlə oyununda vaxtın 90%-i nöqtədə qalın",
+  b_quick:"Cəld gözlər", bd_quick:"Sıçra oyununda orta reaksiya 400 ms-dən tez",
+  b_sharp:"İti göz", bd_sharp:"Kənar oyununda 12-nin hamısını düz tapın",
+  b_breaker:"Fasilə ustası", bd_breaker:"5 qısa fasilə verin",
+  b_endless25:"Sonsuz 25", bd_endless25:"Sonsuz rejimdə 25 hədəf vurun",
+  b_daily:"Gündəlik oyunçu", bd_daily:"Günün tapşırığını oynayın"
+},
+ru:{
+  quick_desc:"45 секунд: фокус близко-далеко и отдых. Удобно между задачами.",
+  blinkNoSound:"Медленно моргайте каждые несколько секунд",
+  blinkTone:"Медленно моргайте при каждом тихом сигнале",
+  soundOn:"Звук вкл.", soundOff:"Звук выкл.", soundOffShift:"Звук выключен, ориентируйтесь на БЛИЗКО и ДАЛЕКО на экране.", soundOffRest:"Звук выключен, иногда поглядывайте на экран.",
+  pageTitle:"бесплатные упражнения для глаз онлайн", installBtn:"Установить приложение", iosHint:"Чтобы установить: нажмите «Поделиться», затем «На экран Домой».",
+  lede:"Короткая тренировка для глаз: следите за точкой, переводите взгляд, замечайте края, меняйте фокус и отдыхайте.",
+  startWorkout:"Начать тренировку", bestLine:"Ваш лучший результат: {b}",
+  streakN:"{n} дн. подряд.", streakKeep:" Потренируйтесь сегодня, чтобы не прервать серию.",
+  streakDone:"На сегодня всё. Возвращайтесь завтра, чтобы начать серию.", streakStart:"Потренируйтесь сегодня, чтобы начать серию.",
+  barsCap:"Последние тренировки", barsAria:"Результаты последних тренировок: {list}",
+  moreTitle:"Другие режимы", play:"Играть",
+  endless_name:"Бесконечные прыжки", endless_desc:"Попадайте по целям, пока не пропустите 3.", endlessBest:"Рекорд: {b}.",
+  endless_how:"Цели появляются без остановки и ускоряются. У вас 3 жизни, каждая упущенная цель отнимает одну. Нажатие мимо цели тоже отнимает жизнь.",
+  daily_name:"Задание дня", daily_desc:"Сегодня у всех одинаковые цели.", dailyToday:"Сегодня: {b}.", dailyNot:"Сегодня ещё не играли.",
+  daily_how:"Сегодняшние цели появляются у всех в одном порядке. Играйте сколько угодно, засчитывается лучший результат дня.",
+  dailyNo:"Задание дня #{d}", dailyTodayBest:"Лучший за сегодня: {b}",
+  badgesTitle:"Значки", badgesCount:"Получено: {n} из {total}",
+  noteBefore:"<strong>Перед началом:</strong> сядьте примерно на расстоянии вытянутой руки от экрана, держите голову неподвижно и двигайте только глазами.",
+  disclaimer:"{name} предназначен для расслабления и тренировки. Он не лечит проблемы со зрением. При боли в глазах, двоении или резком изменении зрения обратитесь к офтальмологу.",
+  secs:"{n} с", rounds:"{n} раундов",
+  follow_name:"Следи", follow_trains:"Плавное слежение",
+  follow_how:"Держите курсор или палец на движущейся точке. Ведите взглядом, голову не двигайте. Точка постепенно ускоряется.",
+  follow_benefit:"Ваши глаза потренировались плавно следить за движением.",
+  jump_name:"Прыжок", jump_trains:"Быстрые движения глаз",
+  jump_how:"Цели появляются слева и справа. Нажмите на каждую, пока не закончилось кольцо. На каждую цель одна попытка, так что сначала прицельтесь. С каждым попаданием они ускоряются.",
+  jump_benefit:"Вы потренировали быстрые и точные движения глаз, как при просмотре страницы.",
+  edge_name:"Край", edge_trains:"Боковое зрение",
+  edge_how:"Смотрите на крестик в центре. У края экрана на миг появится буква E. Укажите стрелками или кнопками, в какую сторону она была открыта.",
+  edge_benefit:"Вы потренировались замечать то, что находится на краю поля зрения.",
+  shift_name:"Близко-далеко", shift_trains:"Фокус вблизи и вдали",
+  shift_how:"Держите большой палец примерно в 25 см от лица. На высокий звук смотрите на палец, на низкий смотрите вдаль. Переводите взгляд при каждом сигнале, экран тоже подскажет.",
+  shift_benefit:"Ваши глаза переключались между близким и далёким вместо постоянного расстояния до экрана.",
+  rest_name:"Отдых", rest_trains:"Расслабление фокуса",
+  rest_how:"20 секунд смотрите на что-нибудь примерно в 6 метрах, например в окно или на дальнюю стену. Медленно моргайте при каждом тихом сигнале. Звонок сообщит, когда вернуться к экрану.",
+  rest_benefit:"Вы дали глазам перерыв от экрана и моргали, чтобы им было комфортнее.",
+  start:"Начать", backMenu:"В меню", end:"Стоп", arrowKeys:"или стрелки", getReady:"Приготовьтесь",
+  followStat:"На точке: {n}%", jumpStat:"Попаданий: {h}, промахов: {m}", edgeStat:"Верно: {n}",
+  shiftStat:"Высокий звук: близко, низкий: далеко", restStat:"Взгляд вдаль", endlessStat:"Счёт {n}",
+  edgeAsk:"Куда была открыта буква?", edgeRight:"Верно", edgeWrong:"Неверно, ответ: {a}",
+  blink:"Медленно моргните", lookFar:"Посмотрите вдаль", near:"БЛИЗКО", far:"ДАЛЕКО", lookThumb:"Смотрите на большой палец",
+  stepOf:"Шаг {i} из {n}", quickBreak:"Короткий перерыв", next:"Далее: {name2}", seeResults:"Посмотреть результаты",
+  endWorkout:"Завершить тренировку", playAgain:"Сыграть ещё", done:"Готово", skipped:"Пропущено", share:"Поделиться результатом",
+  scoreNote:"Очки показывают, как вы сыграли, а не насколько хорошо вы видите.",
+  followDetail:"Время на точке: {n}%.", jumpDetail:"Попаданий: {h}, промахов: {m}.", avgReact:" Средняя реакция {ms} мс.",
+  edgeDetail:"Верно: {c} из {r}. Самая короткая вспышка {ms} мс.", offDetail:"{n} секунд вне экрана.",
+  shiftDetail:"Переключений фокуса: {n}.", endlessDetail:"Вы поразили {n} целей, прежде чем пропустили 3.",
+  firstSaved:"Первый результат сохранён. В следующий раз вы увидите свой прогресс.", same:"Так же, как в первый раз.",
+  followUp:"На {d} п. больше, чем в первый раз.", followDown:"На {d} п. меньше, чем в первый раз. Результаты меняются день ото дня.",
+  jumpUp:"Ваша реакция на {d} мс быстрее, чем в первый раз.", jumpDown:"На {d} мс медленнее, чем в первый раз. Результаты меняются день ото дня.",
+  edgeUp:"Вы заметили вспышку на {d} мс короче, чем в первый раз.", edgeDown:"Самая короткая вспышка на {d} мс длиннее, чем в первый раз. Результаты меняются день ото дня.",
+  offToday:"Сегодня ваши глаза провели вне экрана {n} с.",
+  newHigh:"Новый рекорд!", yourBest:"Ваш рекорд: {p}.",
+  wDone:"Тренировка завершена", niceWork:"Отлично!", firstScore:"Ваш первый результат.",
+  newBest:"Новый рекорд. Предыдущий: {p}.", daysRow:" {n} дн. подряд.", again:"Повторить тренировку",
+  shareWorkout:"Я набрал {s} очков в тренировке для глаз {name}. Это всего 2 минуты. Сможешь лучше?",
+  shareEx:"Я набрал {s} в упражнении «{ex}» в {name}, игре-тренировке для глаз. Сможешь лучше?",
+  shareBreak:"Я только что дал глазам короткий отдых с {name}. Попробуй:",
+  shareEndless:"Я поразил {n} целей в «Бесконечных прыжках» {name}. Сможешь лучше?",
+  shareDaily:"Задание дня #{d} в {name}: я поразил {n} целей. Сможешь лучше?",
+  copied:"Скопировано. Вставьте, чтобы поделиться.", copyThis:"Скопируйте это сообщение:",
+  newBadge:"Новый значок: {b}",
+  b_first:"Первая тренировка", bd_first:"Завершите полную тренировку",
+  b_streak3:"3 дня подряд", bd_streak3:"Тренируйтесь 3 дня подряд",
+  b_streak7:"7 дней подряд", bd_streak7:"Тренируйтесь 7 дней подряд",
+  b_ten:"10 тренировок", bd_ten:"Завершите 10 полных тренировок",
+  b_steady:"Твёрдый взгляд", bd_steady:"Держитесь на точке 90% времени в «Следи»",
+  b_quick:"Быстрый взгляд", bd_quick:"Средняя реакция быстрее 400 мс в «Прыжке»",
+  b_sharp:"Острый глаз", bd_sharp:"Ответьте верно на все 12 в «Крае»",
+  b_breaker:"Мастер перерывов", bd_breaker:"Сделайте 5 коротких перерывов",
+  b_endless25:"Бесконечные 25", bd_endless25:"Поразите 25 целей в «Бесконечных прыжках»",
+  b_daily:"Игрок дня", bd_daily:"Сыграйте задание дня"
+},
+tr:{
+  quick_desc:"45 saniye yakın-uzak odak ve dinlenme. İşler arasında ideal.",
+  blinkNoSound:"Birkaç saniyede bir yavaşça göz kırpın",
+  blinkTone:"Her yumuşak seste yavaşça göz kırpın",
+  soundOn:"Ses açık", soundOff:"Ses kapalı", soundOffShift:"Ses kapalı, ekrandaki YAKIN ve UZAK işaretlerini takip edin.", soundOffRest:"Ses kapalı, arada bir ekrana göz atın.",
+  pageTitle:"ücretsiz online göz egzersizleri", installBtn:"Uygulamayı yükle", iosHint:"Yüklemek için: Paylaş'a, ardından Ana Ekrana Ekle'ye dokunun.",
+  lede:"Gözleriniz için kısa bir egzersiz: takip edin, sıçrayın, kenarlara bakın, odağınızı değiştirin ve dinlenin.",
+  startWorkout:"Tam egzersize başla", bestLine:"En iyi skorunuz: {b}",
+  streakN:"{n} gün üst üste.", streakKeep:" Seriyi sürdürmek için bugün de egzersiz yapın.",
+  streakDone:"Bugünlük tamam. Seri başlatmak için yarın tekrar gelin.", streakStart:"Seri başlatmak için bugün egzersiz yapın.",
+  barsCap:"Son egzersizleriniz", barsAria:"Son egzersiz skorlarınız: {list}",
+  moreTitle:"Diğer oyun modları", play:"Oyna",
+  endless_name:"Sonsuz sıçrama", endless_desc:"3 hedef kaçırana kadar vurun.", endlessBest:"Rekor: {b}.",
+  endless_how:"Hedefler durmadan gelir ve hızlanır. 3 canınız var, süresi dolan her hedef bir can götürür. Iskalayan bir tıklama da bir can götürür.",
+  daily_name:"Günlük görev", daily_desc:"Bugün herkes için aynı hedefler.", dailyToday:"Bugün: {b}.", dailyNot:"Bugün oynanmadı.",
+  daily_how:"Bugünün hedefleri herkes için aynı sırayla çıkar. İstediğiniz kadar oynayın, bugünkü en iyi skorunuz sayılır.",
+  dailyNo:"Günlük görev #{d}", dailyTodayBest:"Bugünün en iyisi: {b}",
+  badgesTitle:"Rozetler", badgesCount:"Kazanılan: {n}/{total}",
+  noteBefore:"<strong>Başlamadan önce:</strong> ekrandan yaklaşık bir kol boyu uzakta oturun, başınızı sabit tutun ve yalnızca gözlerinizi hareket ettirin.",
+  disclaimer:"{name} rahatlama ve pratik içindir. Görme sorunlarını tedavi etmez. Gözde ağrı, çift görme veya görmede ani değişiklik olursa bir göz doktoruna başvurun.",
+  secs:"{n} sn", rounds:"{n} tur",
+  follow_name:"Takip", follow_trains:"Akıcı takip",
+  follow_how:"İmleci veya parmağınızı hareket eden noktanın üzerinde tutun. Gözleriniz yol göstersin, başınızı sabit tutun. Nokta giderek hızlanır.",
+  follow_benefit:"Gözleriniz hareketi akıcı şekilde takip etmeyi çalıştı.",
+  jump_name:"Sıçra", jump_trains:"Hızlı göz sıçramaları",
+  jump_how:"Hedefler sağda ve solda belirir. Halkası bitmeden her birine tıklayın veya dokunun. Her hedef için tek hakkınız var, önce nişan alın. Vurdukça hızlanırlar.",
+  jump_benefit:"Bir sayfayı tararken olduğu gibi hızlı ve isabetli göz sıçramaları çalıştınız.",
+  edge_name:"Kenar", edge_trains:"Yan görüş",
+  edge_how:"Gözlerinizi ortadaki artıda tutun. Kenara yakın bir yerde E harfi kısa süre görünür. Açık tarafının hangi yöne baktığını ok tuşları veya düğmelerle cevaplayın.",
+  edge_benefit:"Görüş alanınızın kenarındaki şeyleri fark etmeyi çalıştınız.",
+  shift_name:"Yakın-uzak", shift_trains:"Yakın ve uzak odak",
+  shift_how:"Baş parmağınızı yüzünüzden yaklaşık 25 cm uzakta tutun. İnce seste parmağınıza, kalın seste uzaktaki bir şeye bakın. Her seste bakışınızı değiştirin, ekran da bunu gösterir.",
+  shift_benefit:"Gözleriniz sabit ekran mesafesi yerine yakın ile uzak arasında geçiş yaptı.",
+  rest_name:"Dinlen", rest_trains:"Odağı gevşetmek",
+  rest_how:"20 saniye boyunca yaklaşık 6 metre uzaktaki bir şeye, örneğin pencereye veya karşı duvara bakın. Her yumuşak seste yavaşça göz kırpın. Bir zil sesi ekrana dönme zamanını bildirir.",
+  rest_benefit:"Gözlerinize ekrandan mola verdiniz ve rahat etmeleri için göz kırptınız.",
+  start:"Başla", backMenu:"Menüye dön", end:"Bitir", arrowKeys:"veya ok tuşları", getReady:"Hazır olun",
+  followStat:"Noktada: %{n}", jumpStat:"{h} isabet, {m} ıska", edgeStat:"{n} doğru",
+  shiftStat:"İnce ses yakın, kalın ses uzak", restStat:"Gözler ekrandan uzakta", endlessStat:"Skor {n}",
+  edgeAsk:"Açık tarafı hangi yöndeydi?", edgeRight:"Doğru", edgeWrong:"Yanlış, cevap: {a}",
+  blink:"Yavaşça göz kırpın", lookFar:"Uzağa bakın", near:"YAKIN", far:"UZAK", lookThumb:"Baş parmağınıza bakın",
+  stepOf:"Adım {i}/{n}", quickBreak:"Kısa mola", next:"Sıradaki: {name2}", seeResults:"Sonuçları gör",
+  endWorkout:"Egzersizi bitir", playAgain:"Tekrar oyna", done:"Tamam", skipped:"Atlandı", share:"Skorunu paylaş",
+  scoreNote:"Skorlar ne kadar iyi gördüğünüzü değil, nasıl oynadığınızı gösterir.",
+  followDetail:"Noktada kalma oranı: %{n}.", jumpDetail:"{h} isabet, {m} ıska.", avgReact:" Ortalama tepki {ms} ms.",
+  edgeDetail:"{r} turda {c} doğru. En kısa görünme {ms} ms.", offDetail:"Ekrandan uzakta {n} saniye.",
+  shiftDetail:"{n} odak geçişi tamamlandı.", endlessDetail:"3 hedef kaçırmadan önce {n} hedef vurdunuz.",
+  firstSaved:"İlk sonuç kaydedildi. Bir dahaki sefere ilerlemenizi göreceksiniz.", same:"İlk seferinizle aynı.",
+  followUp:"İlk seferinizden {d} puan fazla.", followDown:"İlk seferinizden {d} puan düşük. Skorlar günden güne değişir.",
+  jumpUp:"Tepkileriniz ilk seferinizden {d} ms daha hızlı.", jumpDown:"İlk seferinizden {d} ms daha yavaş. Skorlar günden güne değişir.",
+  edgeUp:"İlk seferinizden {d} ms daha kısa bir görüntüyü yakaladınız.", edgeDown:"En kısa görünme ilk seferinizden {d} ms daha uzundu. Skorlar günden güne değişir.",
+  offToday:"Bugün gözleriniz ekrandan uzakta {n} saniye geçirdi.",
+  newHigh:"Yeni rekor!", yourBest:"Rekorunuz: {p}.",
+  wDone:"Egzersiz tamamlandı", niceWork:"Harika!", firstScore:"İlk egzersiz skorunuz.",
+  newBest:"Yeni rekor. Önceki rekor: {p}.", daysRow:" {n} gün üst üste.", again:"Egzersizi tekrarla",
+  shareWorkout:"{name} göz egzersizinde {s} puan aldım. Sadece 2 dakika sürüyor. Beni geçebilir misin?",
+  shareEx:"{name} göz egzersizi oyununda {ex} bölümünde {s} puan aldım. Geçebilir misin?",
+  shareBreak:"{name} ile gözlerime kısa bir mola verdim. Sen de dene:",
+  shareEndless:"{name} Sonsuz sıçramada {n} hedef vurdum. Geçebilir misin?",
+  shareDaily:"{name} günlük görev #{d}: {n} hedef vurdum. Geçebilir misin?",
+  copied:"Kopyalandı. Paylaşmak için istediğiniz yere yapıştırın.", copyThis:"Paylaşmak için bu mesajı kopyalayın:",
+  newBadge:"Yeni rozet: {b}",
+  b_first:"İlk egzersiz", bd_first:"Tam bir egzersizi bitirin",
+  b_streak3:"3 gün üst üste", bd_streak3:"3 gün üst üste egzersiz yapın",
+  b_streak7:"7 gün üst üste", bd_streak7:"7 gün üst üste egzersiz yapın",
+  b_ten:"10 egzersiz", bd_ten:"10 tam egzersiz bitirin",
+  b_steady:"Sabit bakış", bd_steady:"Takip oyununda sürenin %90'ında noktada kalın",
+  b_quick:"Çevik gözler", bd_quick:"Sıçra oyununda ortalama tepki 400 ms altı",
+  b_sharp:"Keskin göz", bd_sharp:"Kenar oyununda 12'nin hepsini doğru bilin",
+  b_breaker:"Mola ustası", bd_breaker:"5 kısa mola verin",
+  b_endless25:"Sonsuz 25", bd_endless25:"Sonsuz sıçramada 25 hedef vurun",
+  b_daily:"Günlük oyuncu", bd_daily:"Bir günlük görev oynayın"
+}
+};
+
+(() => {
+  const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  // ---------- storage ----------
+  const K = {best:'eyegym-best', hist:'eyegym-history', first:'eyegym-first', off:'eyegym-offscreen', lang:'eyegym-lang',
+    sound:'eyegym-sound', badges:'eyegym-badges', breaks:'eyegym-breaks', endless:'eyegym-endless-best', daily:'eyegym-daily'};
+  function getJSON(k, d){ try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch(e){ return d; } }
+  function setJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  const today = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const getHistory = () => { const h = getJSON(K.hist, []); return Array.isArray(h) ? h : []; };
+
+  // ---------- language ----------
+  let lang = getJSON(K.lang, null);
+  if (!I18N[lang]){ const nl = (navigator.language || 'en').slice(0,2).toLowerCase(); lang = I18N[nl] ? nl : 'en'; }
+  function t(key, vars){
+    let s = (I18N[lang] && I18N[lang][key]) ?? I18N.en[key] ?? key;
+    const v = Object.assign({name: CONFIG.name}, vars || {});
+    return s.replace(/\{(\w+)\}/g, (m, k) => v[k] != null ? v[k] : m);
+  }
+  // ---------- sound ----------
+  let soundOn = getJSON(K.sound, true) !== false;
+  const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/>';
+  const ICON_ON = SPK + '<path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+  const ICON_OFF = SPK + '<path d="m16 9 6 6M22 9l-6 6"/></svg>';
+  function renderSound(){
+    const icon = soundOn ? ICON_ON : ICON_OFF, label = t(soundOn ? 'soundOn' : 'soundOff');
+    const b = document.getElementById('soundBtn'), h = document.getElementById('hudSound');
+    b.innerHTML = icon + '<span>' + label + '</span>'; b.setAttribute('aria-pressed', String(soundOn));
+    h.innerHTML = icon; h.setAttribute('aria-label', label); h.title = label;
+  }
+  function toggleSound(){ soundOn = !soundOn; setJSON(K.sound, soundOn); if (soundOn) unlockAudio(); renderSound(); }
+
+  // ---------- visitor stats (GoatCounter, only if a code is set) ----------
+  if (CONFIG.goatcounter){
+    const gs = document.createElement('script'); gs.async = true; gs.src = 'https://gc.zgo.at/count.js';
+    gs.dataset.goatcounter = `https://${CONFIG.goatcounter}.goatcounter.com/count`; document.head.appendChild(gs);
+  }
+  function track(name){ try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({path: name, title: name, event: true}); } catch(e){} }
+
+  const ORDER = ['follow','jump','edge','shift','rest'];
+  const exName = id => t(id + '_name');
+  const baseTitle = () => `${CONFIG.name}: ${t('pageTitle')}`;
+  const exLen = id => ({follow:t('secs',{n:30}), jump:t('secs',{n:30}), edge:t('rounds',{n:12}), shift:t('secs',{n:24}), rest:t('secs',{n:20})})[id];
+  const isJumpMode = id => id === 'endless' || id === 'daily';
+
+  // ---------- helpers ----------
+  const show = id => {
+    $$('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+    const f = document.querySelector('#'+id+' .primary'); if (f && id !== 'play') f.focus({preventScroll:true});
+  };
+  let toastT = null;
+  function toast(msg){ const el = $('#toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 4500); }
+  function mulberry32(a){ return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let x = Math.imul(a ^ a >>> 15, 1 | a); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; }; }
+  function dailyNumber(){ const d = new Date(); return Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(2026, 8, 30)) / 86400000) + 1; }
+  function dailySeed(){ const d = new Date(); return d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate(); }
+
+  // ---------- progress, streaks, off-screen time ----------
+  function saveWorkout(score, details){ const h = getHistory(); h.push({date: today(), score, details}); setJSON(K.hist, h.slice(-60)); }
+  function streakDays(){
+    const days = new Set(getHistory().map(x => x.date));
+    const d = new Date(); if (!days.has(today(d))) d.setDate(d.getDate() - 1);
+    let n = 0; while (days.has(today(d))){ n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
+  function addOffscreen(sec){ const o = getJSON(K.off, {}), td = today(); const total = (o.date === td ? o.seconds : 0) + sec; setJSON(K.off, {date:td, seconds:total}); return total; }
+  function offscreenToday(){ const o = getJSON(K.off, {}); return o.date === today() ? o.seconds : 0; }
+  function progressLine(id, m){
+    if (m == null || !['follow','jump','edge'].includes(id)) return '';
+    const first = getJSON(K.first, {});
+    if (first[id] == null){ first[id] = m; setJSON(K.first, first); return t('firstSaved'); }
+    const d = id === 'follow' ? m - first[id] : first[id] - m;   // ms metrics: lower is better
+    if (d === 0) return t('same');
+    return d > 0 ? t(id + 'Up', {d}) : t(id + 'Down', {d: -d});
+  }
+
+  // ---------- badges ----------
+  const BADGES = ['first','streak3','streak7','ten','steady','quick','sharp','breaker','endless25','daily'];
+  function awardBadges(ctx){
+    const have = new Set(getJSON(K.badges, [])), h = getHistory().length, st = streakDays(), br = getJSON(K.breaks, 0), r = ctx.r || {};
+    const cond = {
+      first: h >= 1, streak3: st >= 3, streak7: st >= 7, ten: h >= 10,
+      steady: ctx.id === 'follow' && r.score >= 90,
+      quick: ctx.id === 'jump' && r.metric != null && r.metric < 400 && r.hits >= 5,
+      sharp: ctx.id === 'edge' && r.correct === 12,
+      breaker: br >= 5,
+      endless25: isJumpMode(ctx.id) && r.score >= 25,
+      daily: ctx.id === 'daily'
+    };
+    const fresh = BADGES.filter(b => cond[b] && !have.has(b));
+    if (!fresh.length) return;
+    fresh.forEach(b => have.add(b)); setJSON(K.badges, [...have]);
+    setTimeout(() => toast(fresh.map(b => t('newBadge', {b: t('b_'+b)})).join('   ')), 400);
+  }
+
+  // ---------- share ----------
+  let lastShare = '';
+  async function shareText(text, statusEl){
+    const url = CONFIG.gameUrl || location.href;
+    statusEl.textContent = '';
+    const old = statusEl.parentElement.querySelector('.share-fallback'); if (old) old.remove();
+    if (navigator.share){
+      try { await navigator.share({title: CONFIG.name, text, url}); return; }
+      catch(e){ if (e && e.name === 'AbortError') return; }
+    }
+    const full = `${text} ${url}`;
+    try { await navigator.clipboard.writeText(full); statusEl.textContent = t('copied'); return; } catch(e){}
+    statusEl.textContent = t('copyThis');
+    const ta = document.createElement('textarea');
+    ta.className = 'share-fallback'; ta.rows = 3; ta.readOnly = true; ta.value = full;
+    statusEl.after(ta); ta.focus(); ta.select();
+  }
+  $('#resShare').onclick = () => { track('share'); shareText(lastShare, $('#resShareStatus')); };
+  $('#sumShare').onclick = () => { track('share'); shareText(lastShare, $('#sumShareStatus')); };
+
+  // ---------- home ----------
+  function renderHome(){
+    document.documentElement.lang = lang;
+    document.title = baseTitle();
+    $('#title').setAttribute('aria-label', CONFIG.name);
+    $('#t1').textContent = CONFIG.titleLines[0] || ''; $('#t2').textContent = CONFIG.titleLines[1] || '';
+    $$('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+    $$('[data-i18n-html]').forEach(el => el.innerHTML = t(el.dataset.i18nHtml));
+    $$('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+
+    $('#stepList').innerHTML = ORDER.map((id,i) => `<li><span class="n">${i+1}</span><span class="t"><strong>${esc(exName(id))}</strong><span>${esc(t(id+'_trains'))}, ${esc(exLen(id))}</span></span><button data-play="${id}">${esc(t('play'))}</button></li>`).join('');
+
+    const eb = getJSON(K.endless, 0), dd = getJSON(K.daily, {});
+    $('#modeList').innerHTML = ['quick','endless','daily'].map(id => {
+      const extra = id === 'quick' ? '' : id === 'endless' ? (eb ? t('endlessBest', {b:eb}) : '') : (dd.date === today() ? t('dailyToday', {b:dd.best}) : t('dailyNot'));
+      return `<li><span class="t"><strong>${esc(id === 'quick' ? t('quickBreak') : t(id+'_name'))}</strong><span>${esc(t(id+'_desc'))} ${esc(extra)}</span></span><button data-play="${id}">${esc(t('play'))}</button></li>`;
+    }).join('');
+
+
+    const have = new Set(getJSON(K.badges, []));
+    $('#badgeCount').textContent = t('badgesCount', {n: have.size, total: BADGES.length});
+    $('#badges').innerHTML = BADGES.map(b => `<li class="badge${have.has(b) ? ' got' : ''}"><strong>${have.has(b) ? '✓ ' : ''}${esc(t('b_'+b))}</strong><span>${esc(t('bd_'+b))}</span></li>`).join('');
+
+    const best = getJSON(K.best, null);
+    $('#bestLine').textContent = best != null ? t('bestLine', {b:best}) : '';
+    const h = getHistory(), box = $('#history');
+    if (!h.length){ box.hidden = true; }
+    else {
+      const st = streakDays(), doneToday = h.some(x => x.date === today());
+      $('#streakLine').textContent = st > 1 ? t('streakN', {n:st}) + (doneToday ? '' : t('streakKeep')) : (doneToday ? t('streakDone') : t('streakStart'));
+      const last = h.slice(-10);
+      $('#bars').innerHTML = last.map(x => `<span style="height:${Math.max(6, x.score)}%" title="${x.date}: ${x.score}"></span>`).join('');
+      $('#bars').setAttribute('aria-label', t('barsAria', {list: last.map(x => x.score).join(', ')}));
+      box.hidden = false;
+    }
+  }
+  $$('.lang button').forEach(b => b.onclick = () => { lang = b.dataset.lang; setJSON(K.lang, lang); renderHome(); });
+  document.addEventListener('click', e => { const b = e.target.closest('[data-play]'); if (b) b.dataset.play === 'quick' ? startQuick() : playSingle(b.dataset.play); });
+  let eRot = 0;
+  $('#bigE').addEventListener('click', () => { eRot += 90; $('#bigE').style.transform = `rotate(${eRot}deg)`; });
+
+  // ---------- flow ----------
+  let mode = 'single', plan = [], queue = [], results = {}, current = null;
+  function stepText(id){
+    if (id === 'daily') return t('dailyNo', {d: dailyNumber()});
+    if (mode !== 'workout' && mode !== 'quick') return '';
+    const s = t('stepOf', {i: plan.indexOf(id) + 1, n: plan.length});
+    return mode === 'quick' ? `${t('quickBreak')}, ${s.charAt(0).toLowerCase() + s.slice(1)}` : s;
+  }
+  function startPlan(m, p){ mode = m; plan = p; queue = p.slice(); results = {}; next(); }
+  const startWorkout = () => startPlan('workout', ORDER.slice());
+  const startQuick = () => startPlan('quick', ['shift','rest']);
+  function playSingle(id){ mode = 'single'; plan = []; queue = []; results = {}; openIntro(id); }
+  function next(){ const id = queue.shift(); id ? openIntro(id) : showSummary(); }
+  function openIntro(id){
+    current = id;
+    $('#introStep').textContent = stepText(id);
+    $('#introName').textContent = exName(id);
+    $('#introTrains').textContent = t((isJumpMode(id) ? 'jump' : id) + '_trains');
+    $('#introHow').textContent = t(id + '_how') + (!soundOn && id === 'shift' ? ' ' + t('soundOffShift') : !soundOn && id === 'rest' ? ' ' + t('soundOffRest') : '');
+    show('intro');
+  }
+  $('#startWorkout').onclick = startWorkout;
+  $('#soundBtn').onclick = toggleSound;
+  $('#hudSound').onclick = toggleSound;
+  $('#introGo').onclick = () => { unlockAudio(); begin(current); };
+  $('#introBack').onclick = goHome;
+  $('#quit').onclick = () => { stop(); goHome(); };
+  $('#sumAgain').onclick = startWorkout;
+  $('#sumHome').onclick = goHome;
+  function goHome(){ stop(); renderHome(); show('home'); }
+
+  // ---------- canvas ----------
+  const cv = $('#cv'), ctx = cv.getContext('2d'), stage = $('#stage');
+  let W = 0, H = 0, C = {};
+  const FONT = '"Atkinson Hyperlegible", system-ui, sans-serif';
+  function readColors(){ const cs = getComputedStyle(document.documentElement); ['ink','muted','accent','target','line','good','bad','surface'].forEach(k => C[k] = cs.getPropertyValue('--'+k).trim()); }
+  function resize(){
+    const r = stage.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    W = r.width; H = r.height; cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  window.addEventListener('resize', () => { if (running) resize(); });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', readColors);
+  let isTouch = matchMedia('(pointer: coarse)').matches;
+  const R = () => isTouch ? Math.max(22, Math.min(W,H)*0.055) : Math.max(16, Math.min(W,H)*0.04);
+  const ZONE = () => isTouch ? 2.6 : 1.8;   // Follow: how close counts as on the dot
+  const HIT = () => isTouch ? 2.2 : 1.5;    // Jump: how close a tap counts as a hit
+  const rand = (a,b) => a + Math.random()*(b-a);
+  const dist = (ax,ay,bx,by) => Math.hypot(ax-bx, ay-by);
+  function centerText(txt, x, y, px, color, maxW){
+    ctx.font = `700 ${px}px ${FONT}`;
+    if (maxW){ const w = ctx.measureText(txt).width; if (w > maxW) ctx.font = `700 ${Math.floor(px*maxW/w)}px ${FONT}`; }
+    ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(txt, x, y); ctx.textBaseline = 'alphabetic';
+  }
+
+  const pointer = {x:0,y:0,active:false};
+  const pos = e => { isTouch = e.pointerType !== 'mouse'; const r = cv.getBoundingClientRect(); pointer.x = e.clientX - r.left; pointer.y = e.clientY - r.top; };
+  cv.addEventListener('pointermove', e => { pos(e); pointer.active = true; });
+  cv.addEventListener('pointerdown', e => { pos(e); pointer.active = true; if (running && count <= 0 && ex.onDown) ex.onDown(pointer.x, pointer.y); });
+  cv.addEventListener('pointerup', e => { if (e.pointerType !== 'mouse') pointer.active = false; });
+  cv.addEventListener('pointerleave', () => { pointer.active = false; });
+
+  // ---------- audio ----------
+  let actx = null;
+  function unlockAudio(){ try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch(e){} }
+  function tone(freq, start = 0, len = 0.45, vol = 0.16){
+    try {
+      if (!actx || !soundOn) return; const t0 = actx.currentTime + start, o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(vol, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + len);
+      o.connect(g).connect(actx.destination); o.start(t0); o.stop(t0 + len + 0.05);
+    } catch(e){}
+  }
+  const chime = () => { tone(523.25, 0, 1.1, 0.14); tone(783.99, 0.18, 1.1, 0.14); };
+
+  // ---------- exercises ----------
+  function makeFollow(){
+    const dur = 30; let t0 = 0, on = 0, p = 0; const trail = [];
+    const at = () => { const m = Math.max(40, Math.min(W,H)*0.12); return {x: W/2 + (W/2-m)*Math.sin(3*p), y: H/2 + (H/2-m)*Math.sin(2*p)}; };
+    return {
+      update(dt){
+        t0 += dt; const k = t0/dur;
+        const m = Math.max(40, Math.min(W,H)*0.12), A = Math.max(3*(W/2-m), 2*(H/2-m), 1);
+        p += dt*Math.min(0.45 + 0.45*k, (220 + 280*k)/A);   // max about 220 to 500 px/s
+        const d = at(); trail.push(d); if (trail.length > 36) trail.shift();
+        if (pointer.active && dist(pointer.x,pointer.y,d.x,d.y) < R()*ZONE()) on += dt;
+        if (t0 >= dur) this.done = true;
+      },
+      draw(){
+        const d = at(), r = R(), z = ZONE(), hit = pointer.active && dist(pointer.x,pointer.y,d.x,d.y) < r*z;
+        trail.forEach((q,i) => { ctx.globalAlpha = i/trail.length*0.25; ctx.fillStyle = C.target; ctx.beginPath(); ctx.arc(q.x,q.y,r*0.35,0,7); ctx.fill(); });
+        ctx.globalAlpha = 1; ctx.lineWidth = 3; ctx.strokeStyle = hit ? C.accent : C.line;
+        ctx.beginPath(); ctx.arc(d.x,d.y,r*z,0,7); ctx.stroke();
+        ctx.fillStyle = C.target; ctx.beginPath(); ctx.arc(d.x,d.y,r,0,7); ctx.fill();
+        if (pointer.active){ ctx.strokeStyle = C.ink; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(pointer.x,pointer.y,isTouch ? 30 : 6,0,7); ctx.stroke(); }
+      },
+      hud(){ return {stat: t0 > 0 ? t('followStat', {n: Math.round(on/t0*100)}) : '', time: Math.max(0, Math.ceil(dur - t0))}; },
+      result(){ const s = Math.round(on/dur*100); return {score:s, metric:s, detail:t('followDetail', {n:s})}; }
+    };
+  }
+
+  // Shared target logic for Jump, Endless Jump and the daily challenge
+  function makeTargets(opts){
+    const rng = opts.rng || Math.random;
+    let t0 = 0, hits = 0, misses = 0, lives = 3, life = 1.4, gap = 0.4, side = 0, target = null;
+    const rts = [], pops = [];
+    const spawn = () => {
+      side ^= 1; const r = R(), m = r*2.2;
+      const lo = side ? Math.max(W*0.62, m) : m, hi = side ? W - m : Math.min(W*0.38, W - m);
+      target = {x: lo + (hi-lo)*rng(), y: m + (H - 2*m)*rng(), age:0, life};
+    };
+    const avgMs = () => rts.length ? Math.round(rts.reduce((a,b)=>a+b,0)/rts.length*1000) : null;
+    return {
+      update(dt){
+        t0 += dt;
+        if (target){
+          target.age += dt;
+          if (target.age >= target.life){
+            misses++; pops.push({x:target.x,y:target.y,a:1,miss:true}); target = null; gap = 0.3;
+            if (opts.endless){ lives--; if (lives <= 0) this.done = true; }
+          }
+        } else { gap -= dt; if (gap <= 0 && (opts.endless || t0 < opts.dur)) spawn(); }
+        pops.forEach(q => q.a -= dt*2.5); while (pops.length && pops[0].a <= 0) pops.shift();
+        if (!opts.endless && t0 >= opts.dur) this.done = true;
+      },
+      onDown(x,y){
+        if (!target) return;
+        if (dist(x,y,target.x,target.y) <= R()*HIT()){
+          hits++; rts.push(target.age); life = Math.max(opts.endless ? 0.45 : 0.6, life - (opts.endless ? 0.02 : 0.03));
+          pops.push({x:target.x,y:target.y,a:1}); target = null; gap = 0.15;
+        } else {
+          misses++; pops.push({x:target.x,y:target.y,a:1,miss:true}); target = null; gap = 0.35;
+          if (opts.endless){ lives--; if (lives <= 0) this.done = true; }
+        }
+      },
+      draw(){
+        const r = R();
+        pops.forEach(q => { ctx.globalAlpha = Math.max(0,q.a); ctx.strokeStyle = q.miss ? C.bad : C.accent; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.arc(q.x,q.y,r*(1 + (1-q.a)*1.2),0,7); ctx.stroke(); });
+        ctx.globalAlpha = 1;
+        if (target){
+          ctx.fillStyle = C.target; ctx.beginPath(); ctx.arc(target.x,target.y,r,0,7); ctx.fill();
+          ctx.strokeStyle = C.ink; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.arc(target.x,target.y,r*1.5,-Math.PI/2,-Math.PI/2 + (1 - target.age/target.life)*Math.PI*2); ctx.stroke();
+        }
+      },
+      hud(){
+        if (opts.endless) return {stat: t('endlessStat', {n:hits}), time: '♥'.repeat(Math.max(0,lives)) + '♡'.repeat(3 - Math.max(0,lives))};
+        return {stat: t('jumpStat', {h:hits, m:misses}), time: Math.max(0, Math.ceil(opts.dur - t0))};
+      },
+      result(){
+        const avg = avgMs(), react = avg ? t('avgReact', {ms:avg}) : '';
+        if (opts.endless) return {score:hits, hits, metric:avg, detail: t('endlessDetail', {n:hits}) + react};
+        const tot = hits + misses, s = tot ? Math.round(hits/tot*100) : 0;
+        return {score:s, hits, metric:avg, detail: t('jumpDetail', {h:hits, m:misses}) + react};
+      }
+    };
+  }
+
+  const ANG = {right:0, down:Math.PI/2, left:Math.PI, up:-Math.PI/2};
+  const ARROW = {right:'→', down:'↓', left:'←', up:'↑'};
+  const DIRS = Object.keys(ANG);
+  function drawE(x,y,s,ang,color,alpha){
+    ctx.save(); ctx.translate(x,y); ctx.rotate(ang); ctx.globalAlpha = alpha; ctx.fillStyle = color;
+    const u = s/5, h = s/2;
+    ctx.fillRect(-h,-h,u,s); ctx.fillRect(-h,-h,s,u); ctx.fillRect(-h,-u/2,s,u); ctx.fillRect(-h,h-u,s,u);
+    ctx.restore();
+  }
+  function makeEdge(){
+    const rounds = 12; let round = 1, correct = 0, flash = 0.35, minFlash = 0.35, state = 'wait', timer = rand(0.7,1.3), e = null, fb = null;
+    // Each direction appears 3 times, shuffled, never the same twice in a row
+    let bag;
+    do {
+      bag = [...DIRS, ...DIRS, ...DIRS];
+      for (let i = bag.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [bag[i], bag[j]] = [bag[j], bag[i]]; }
+    } while (bag.some((d,i) => i > 0 && d === bag[i-1]));
+    const place = () => {
+      const a = rand(0, Math.PI*2), s = Math.max(22, Math.min(W,H)*0.055), m = s + 24, f = rand(0.7, 0.95);
+      e = {x: W/2 + Math.cos(a)*(W/2 - m)*f, y: H/2 + Math.sin(a)*(H/2 - m)*f, dir: bag[round-1], s};
+      minFlash = Math.min(minFlash, flash);
+    };
+    return {
+      update(dt){
+        timer -= dt;
+        if (state === 'wait' && timer <= 0){ place(); state = 'show'; timer = flash; }
+        else if (state === 'show' && timer <= 0){ state = 'answer'; }
+        else if (state === 'feedback' && timer <= 0){
+          if (round >= rounds){ this.done = true; return; }
+          round++; state = 'wait'; timer = rand(0.7,1.4); fb = null;
+        }
+      },
+      answer(dir){
+        if (state !== 'show' && state !== 'answer') return;
+        const ok = dir === e.dir;
+        if (ok){ correct++; flash = Math.max(0.1, flash - 0.03); } else flash = Math.min(0.6, flash + 0.05);
+        fb = {ok}; state = 'feedback'; timer = 0.7;
+      },
+      draw(){
+        const cx = W/2, cy = H/2, k = 12;
+        ctx.strokeStyle = C.ink; ctx.lineWidth = 3; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(cx-k,cy); ctx.lineTo(cx+k,cy); ctx.moveTo(cx,cy-k); ctx.lineTo(cx,cy+k); ctx.stroke();
+        if (state === 'show') drawE(e.x,e.y,e.s,ANG[e.dir],C.ink,1);
+        if (state === 'answer') centerText(t('edgeAsk'), cx, cy + 40, 16, C.muted, W - 32);
+        if (state === 'feedback' && fb){
+          drawE(e.x,e.y,e.s,ANG[e.dir], fb.ok ? C.good : C.bad, 0.45);
+          centerText(fb.ok ? t('edgeRight') : t('edgeWrong', {a: ARROW[e.dir]}), cx, cy + 40, 16, fb.ok ? C.good : C.bad, W - 32);
+        }
+      },
+      hud(){ return {stat: t('edgeStat', {n:correct}), time: `${Math.min(round,rounds)}/${rounds}`}; },
+      result(){
+        const s = Math.round(correct/rounds*100), mf = Math.round(minFlash*1000);
+        return {score:s, correct, metric: correct ? mf : null, detail: t('edgeDetail', {c:correct, r:rounds, ms:mf})};
+      }
+    };
+  }
+
+  function makeShift(){
+    const hold = 4, switches = 6, dur = hold*switches; let t0 = 0, lastStep = -1;
+    return {
+      update(dt){
+        t0 += dt; const step = Math.floor(t0 / hold);
+        if (step !== lastStep && step < switches){ lastStep = step; tone(step % 2 === 0 ? 880 : 330); }
+        if (t0 >= dur){ chime(); this.done = true; }
+      },
+      draw(){
+        const cx = W/2, cy = H/2, base = Math.min(W,H)*0.22, step = Math.min(switches-1, Math.floor(t0/hold));
+        const near = step % 2 === 0, k = (t0 % hold) / hold;
+        ctx.strokeStyle = C.line; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(cx,cy,base*1.25,0,7); ctx.stroke();
+        ctx.strokeStyle = C.accent; ctx.beginPath(); ctx.arc(cx,cy,base*1.25,-Math.PI/2,-Math.PI/2 + Math.PI*2*(1-k)); ctx.stroke();
+        ctx.fillStyle = C.accent; ctx.globalAlpha = 0.14; ctx.beginPath(); ctx.arc(cx,cy, near ? base : base*0.35, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
+        centerText(near ? t('near') : t('far'), cx, cy, Math.round(base*0.42), C.ink, base*2.2);
+        centerText(near ? t('lookThumb') : t('lookFar'), cx, cy + base*1.25 + 34, 18, C.muted, W - 32);
+      },
+      hud(){ return {stat: t('shiftStat'), time: Math.max(0, Math.ceil(dur - t0))}; },
+      result(){ return {score:null, offscreen:dur, detail: t('shiftDetail', {n:switches})}; }
+    };
+  }
+
+  function makeRest(){
+    const dur = 20; let t0 = 0, chimed = false, lastBlink = 0;
+    return {
+      update(dt){
+        t0 += dt;
+        const b = Math.floor(t0 / 4);                      // soft blink tone every 4 seconds
+        if (b > lastBlink && t0 < dur - 1){ lastBlink = b; tone(392, 0, 0.6, 0.07); }
+        if (t0 >= dur){ if (!chimed){ chime(); chimed = true; } this.done = true; }
+      },
+      draw(){
+        const cx = W/2, cy = H/2, base = Math.min(W,H)*0.22, rr = base*(1 + 0.06*Math.sin(t0*Math.PI*2/5));
+        ctx.fillStyle = C.accent; ctx.globalAlpha = 0.12; ctx.beginPath(); ctx.arc(cx,cy,rr,0,7); ctx.fill(); ctx.globalAlpha = 1;
+        ctx.strokeStyle = C.line; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(cx,cy,base*1.25,0,7); ctx.stroke();
+        ctx.strokeStyle = C.accent; ctx.beginPath(); ctx.arc(cx,cy,base*1.25,-Math.PI/2,-Math.PI/2 + Math.PI*2*(1 - Math.min(t0,dur)/dur)); ctx.stroke();
+        centerText(String(Math.max(0, Math.ceil(dur - t0))), cx, cy, Math.round(base*0.55), C.ink);
+        centerText(t('lookFar'), cx, cy + base*1.25 + 30, 18, C.ink, W - 32);
+        centerText(t(soundOn ? 'blinkTone' : 'blinkNoSound'), cx, cy + base*1.25 + 56, 15, C.muted, W - 32);
+      },
+      hud(){ return {stat: t('restStat'), time: Math.max(0, Math.ceil(dur - t0))}; },
+      result(){ return {score:null, offscreen:dur, detail: t('offDetail', {n:dur})}; }
+    };
+  }
+
+  const MAKE = {
+    follow: makeFollow, jump: () => makeTargets({dur:30}), edge: makeEdge, shift: makeShift, rest: makeRest,
+    endless: () => makeTargets({endless:true}), daily: () => makeTargets({endless:true, rng: mulberry32(dailySeed())})
+  };
+
+  // ---------- loop ----------
+  let ex = null, running = false, raf = 0, last = null, count = 0;
+  function begin(id){
+    current = id; show('play'); readColors(); resize();
+    $('#hudName').textContent = exName(id); $('#hudStep').textContent = stepText(id);
+    $('#dpad').classList.toggle('on', id === 'edge');
+    ex = MAKE[id](); count = 3; last = null; running = true; pointer.active = false;
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(frame);
+  }
+  function stop(){ running = false; cancelAnimationFrame(raf); $('#dpad').classList.remove('on'); }
+  function frame(now){
+    if (!running) return;
+    const dt = last == null ? 0 : Math.min(0.05, (now - last)/1000); last = now;
+    ctx.clearRect(0,0,W,H);
+    if (count > 0) count -= dt; else ex.update(dt);
+    ex.draw();
+    if (count > 0){
+      ctx.globalAlpha = 0.85;
+      centerText(String(Math.ceil(count)), W/2, H/2 - (current === 'edge' ? Math.min(W,H)*0.2 : 0), Math.round(Math.min(W,H)*0.22), C.muted);
+      ctx.globalAlpha = 1;
+    }
+    const h = ex.hud(); $('#hudStat').textContent = count > 0 ? t('getReady') : h.stat; $('#hudTime').textContent = h.time;
+    if (ex.done){ finish(); return; }
+    raf = requestAnimationFrame(frame);
+  }
+
+  function finish(){
+    stop();
+    const r = ex.result(); results[current] = r;
+    $('#resStep').textContent = stepText(current);
+    $('#resName').textContent = exName(current);
+    $('#resScore').textContent = r.score == null ? t('done') : r.score;
+    $('#resDetail').textContent = r.detail;
+
+    let prog = '';
+    if (current === 'endless'){
+      const b = getJSON(K.endless, 0);
+      if (r.score > b){ setJSON(K.endless, r.score); prog = b ? t('newHigh') : ''; } else prog = t('yourBest', {p:b});
+    } else if (current === 'daily'){
+      const d = getJSON(K.daily, {}), cur = d.date === today() ? d.best : 0;
+      if (r.score > cur){ setJSON(K.daily, {date: today(), best: r.score}); prog = cur ? t('newHigh') : t('dailyTodayBest', {b:r.score}); }
+      else prog = t('dailyTodayBest', {b:cur});
+    } else if (r.offscreen) prog = t('offToday', {n: addOffscreen(r.offscreen)});
+    else prog = progressLine(current, r.metric);
+    $('#resProgress').textContent = prog;
+    $('#resBenefit').textContent = t((isJumpMode(current) ? 'jump' : current) + '_benefit');
+    $('#resNote').hidden = r.score == null;
+
+    lastShare = current === 'endless' ? t('shareEndless', {n:r.score})
+      : current === 'daily' ? t('shareDaily', {n:r.score, d:dailyNumber()})
+      : r.score == null ? t('shareBreak') : t('shareEx', {s:r.score, ex:exName(current)});
+    $('#resShareStatus').textContent = '';
+    const oldTa = $('#result .share-fallback'); if (oldTa) oldTa.remove();
+
+    const inPlan = mode === 'workout' || mode === 'quick', lastStep = inPlan && !queue.length;
+    if (mode === 'quick' && lastStep){ setJSON(K.breaks, getJSON(K.breaks, 0) + 1); track('quick-break'); }
+    if (isJumpMode(current)) track(current + '-played');
+    $('#resShare').hidden = inPlan;
+
+    const p = $('#resPrimary'), s = $('#resSecondary'); s.hidden = false;
+    if (inPlan && queue.length){ p.textContent = t('next', {name2: exName(queue[0])}); p.onclick = next; s.textContent = t('endWorkout'); s.onclick = goHome; }
+    else if (mode === 'workout'){ p.textContent = t('seeResults'); p.onclick = next; s.textContent = t('endWorkout'); s.onclick = goHome; }
+    else if (mode === 'quick'){ p.textContent = t('backMenu'); p.onclick = goHome; s.hidden = true; }
+    else { p.textContent = t('playAgain'); p.onclick = () => begin(current); s.textContent = t('backMenu'); s.onclick = goHome; }
+    show('result');
+    awardBadges({id: current, r});
+  }
+
+  function showSummary(){
+    const scored = ORDER.filter(id => results[id] && results[id].score != null);
+    const total = scored.length ? Math.round(scored.reduce((a,id) => a + results[id].score, 0)/scored.length) : 0;
+    const prev = getJSON(K.best, null), details = {};
+    scored.forEach(id => details[id] = results[id].score);
+    saveWorkout(total, details); track('workout-complete');
+    const st = streakDays();
+    $('#sumTotal').textContent = total;
+    if (prev == null || total > prev){ setJSON(K.best, total); $('#sumBest').textContent = prev == null ? t('firstScore') : t('newBest', {p:prev}); }
+    else $('#sumBest').textContent = t('yourBest', {p:prev});
+    if (st > 1) $('#sumBest').textContent += t('daysRow', {n:st});
+    const off = offscreenToday(); $('#sumOff').textContent = off ? t('offToday', {n:off}) : '';
+    lastShare = t('shareWorkout', {s:total});
+    $('#sumShareStatus').textContent = '';
+    const oldTa = $('#summary .share-fallback'); if (oldTa) oldTa.remove();
+    $('#sumList').innerHTML = ORDER.map(id => `<li><span>${esc(exName(id))}</span><span>${results[id] ? (results[id].score == null ? esc(t('done')) : results[id].score) : esc(t('skipped'))}</span></li>`).join('');
+    show('summary');
+    awardBadges({});
+  }
+
+  // ---------- Edge input ----------
+  $('#dpad').addEventListener('click', e => { const b = e.target.closest('[data-dir]'); if (b && running && count <= 0 && ex.answer) ex.answer(b.dataset.dir); });
+  document.addEventListener('keydown', e => {
+    if (!running) return;
+    if (e.key === 'Escape'){ stop(); goHome(); return; }
+    const dir = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right'}[e.key];
+    if (dir && ex.answer && count <= 0){ e.preventDefault(); ex.answer(dir); }
+  });
+
+  // ---------- installable app ----------
+  let deferredPrompt = null, swOK = false;
+  const standalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  function updateInstall(){
+    const b = $('#installBtn'), h = $('#iosHint');
+    b.textContent = t('installBtn'); h.textContent = t('iosHint');
+    if (standalone()){ b.hidden = h.hidden = true; return; }
+    b.hidden = !deferredPrompt;                       // Android and desktop Chrome/Edge
+    h.hidden = !(isIOS() && swOK && !deferredPrompt); // iPhone and iPad: Safari has no install button, so show how
+  }
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; updateInstall(); });
+  window.addEventListener('appinstalled', () => { deferredPrompt = null; updateInstall(); });
+  $('#installBtn').onclick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt(); try { const c = await deferredPrompt.userChoice; if (c && c.outcome === 'accepted') track('install'); } catch(e){}
+    deferredPrompt = null; updateInstall();
+  };
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')){
+    navigator.serviceWorker.register('sw.js').then(() => { swOK = true; updateInstall(); }).catch(() => {});
+  }
+  const _render = renderHome; renderHome = function(){ _render(); updateInstall(); renderSound(); };
+
+  renderHome();
+})();
+</script>
+</body>
+</html>
