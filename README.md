@@ -6,7 +6,6 @@ A free, browser-based eye exercise game. Five short exercises take about two min
 
 ![Eye Gym demo](demo.gif)
 
-![Eye Gym screenshot](screenshot.png)
 
 ## Exercises
 
